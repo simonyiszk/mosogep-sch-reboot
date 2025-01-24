@@ -21,8 +21,6 @@
 #include <avr/delay.h>
 #endif
 
-#define LED_ON() PORTC|=(1<<PC2) //dummy, nincs ott semmi
-
 static uint8_t Enc28j60Bank;
 static int16_t gNextPacketPtr;
 #define ENC28J60_CONTROL_PORT   PORTB
@@ -188,7 +186,6 @@ void enc28j60Init(uint8_t* macaddr)
     SPSR |= (1<<SPI2X);
 	// perform system reset
 	enc28j60WriteOp(ENC28J60_SOFT_RESET, 0, ENC28J60_SOFT_RESET);
-	LED_ON();
     _delay_loop_2(0); // 20ms
 	// check CLKRDY bit to see if reset is complete
         // The CLKRDY does not work. See Rev. B4 Silicon Errata point. Just wait.

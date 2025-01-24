@@ -11,13 +11,11 @@
 #include <util/delay.h>
 #include "ip_arp_udp_tcp.h"
 #include "enc28j60.h"
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>
+
 
 #define ENC_RESET PD3
 
-#define LED_ON() PORTC|=(1<<PC0)
-#define LED_OFF() PORTC&=~(1<<PC0)
 
 //webszerver demo kod alapjan teszt celbol
 static uint8_t mymac[6] = {0x54,0x55,0x58,0x10,0x00,0x29};
@@ -93,6 +91,8 @@ int main(void)
         uint8_t dat[]="          Mosogep.sch by SEM. SEM RULEZ! (FW by .:: FoXX::. 2014)!\0";
 
        	_delay_ms(100);
+        DDRC |= (1<<PC2);
+        PORTC |= (1<<PC2);
         hw_init();
         printf("Begin init\n");
      //   wdt_enable(WDTO_1S);
@@ -118,6 +118,7 @@ int main(void)
         while(1)
         {
      //       wdt_reset();
+            PORTC ^= (1<<PC2);
 			_delay_ms(100);
             //mosogep megmerese
             ADMUX = (ADMUX & 0xf0) | 0; // mosogep kivalasztasa
