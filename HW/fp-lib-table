@@ -1,0 +1,4 @@
+(fp_lib_table
+  (version 7)
+  (lib (name "mosogep_")(type "KiCad")(uri "$(KIPRJMOD)/mosogep_.pretty")(options "")(descr ""))
+)
