@@ -51,7 +51,7 @@ void hw_init()
         //DDRC|=(1<<PC0);
         DDRD|=(1<<ENC_RESET);
         PORTD&=~(1<<ENC_RESET);
-        delay(1000);         //ENC28J60 RESET pulse
+        _delay_ms(1000);         //ENC28J60 RESET pulse
         PORTD|=(1<<ENC_RESET);
 
 		DDRB=(1<<PB2);
@@ -74,20 +74,13 @@ uint8_t read_jumpers(void)
 	if(temp==0) temp=17;
     return temp;
 }
-void delay(uint16_t k)
-{
-	volatile uint16_t i;
-	for(;k>0;k--)
-		for(i=0;i<1000;i++);
-
-}
 
 int main(void)
 {
         uint16_t dat_p;
         uint8_t dat[]="          Mosogep.sch by SEM. SEM RULEZ! (FW by .:: FoXX::. 2014)!\0";
 
-       	delay(100);
+       	_delay_ms(100);
         hw_init();
         printf("Begin init\n");
      //   wdt_enable(WDTO_1S);
@@ -113,7 +106,7 @@ int main(void)
         while(1)
         {
      //       wdt_reset();
-			delay(100);
+			_delay_ms(100);
             //mosogep megmerese
             ADMUX = (ADMUX & 0xf0) | 0; // mosogep kivalasztasa
             _delay_ms(10); //varni a SH kapacitasra
