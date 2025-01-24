@@ -18,8 +18,6 @@
  * Chip type           : ATMEGA88/168/328/644 with ENC28J60
  *********************************************/
 #include <avr/io.h>
-// http://www.nongnu.org/avr-libc/changes-1.8.html:
-#define __PROG_TYPES_COMPAT__
 #include <avr/pgmspace.h>
 #include <string.h>
 #include <ctype.h>
@@ -67,9 +65,9 @@ static uint16_t (*client_tcp_datafill_callback)(uint8_t);
 static uint8_t www_fd=0;
 static uint8_t browsertype=0; // 0 = get, 1 = post
 static void (*client_browser_callback)(uint16_t,uint16_t,uint16_t); // the fields are: uint16_t webstatuscode,uint16_t datapos,uint16_t len; datapos is start of http data and len the the length of that data
-static const prog_char *client_additionalheaderline;
+static PGM_P client_additionalheaderline;
 static char *client_postval;
-static const prog_char *client_urlbuf;
+static PGM_P client_urlbuf;
 static const char *client_urlbuf_var;
 static const char *client_hoststr;
 static uint8_t *bufptr=0; // ugly workaround for backward compatibility
@@ -407,7 +405,7 @@ uint16_t get_tcp_data_len(uint8_t *buf)
 // fill in tcp data at position pos. pos=0 means start of
 // tcp data. Returns the position at which the string after
 // this string could be filled.
-uint16_t fill_tcp_data_p(uint8_t *buf,uint16_t pos, const prog_char *progmem_s)
+uint16_t fill_tcp_data_p(uint8_t *buf,uint16_t pos, PGM_P progmem_s)
 {
         char c;
         // fill in tcp data at position pos
@@ -646,7 +644,7 @@ void www_server_reply(uint8_t *buf,uint16_t dlen)
 
 #if defined (ALL_clients)
 // fill buffer with a prog-mem string
-void fill_buf_p(uint8_t *buf,uint16_t len, const prog_char *progmem_s)
+void fill_buf_p(uint8_t *buf,uint16_t len, PGM_P progmem_s)
 {
         while (len){
                 *buf= pgm_read_byte(progmem_s);
@@ -1254,7 +1252,7 @@ uint8_t www_client_internal_result_callback(uint8_t fd, uint8_t statuscode, uint
 // The string buffers to which urlbuf_varpart and hoststr are pointing
 // must not be changed until the callback is executed.
 //
-void client_browse_url(const prog_char *urlbuf,const char *urlbuf_varpart,const char *hoststr,void (*callback)(uint16_t,uint16_t,uint16_t),uint8_t *dstip,uint8_t *dstmac)
+void client_browse_url(PGM_P urlbuf,const char *urlbuf_varpart,const char *hoststr,void (*callback)(uint16_t,uint16_t,uint16_t),uint8_t *dstip,uint8_t *dstmac)
 {
         if (!enc28j60linkup())return;
         client_urlbuf=urlbuf;
@@ -1272,7 +1270,7 @@ void client_browse_url(const prog_char *urlbuf,const char *urlbuf_varpart,const 
 // postval is a string buffer which can only be de-allocated by the caller 
 // when the post operation was really done (e.g when callback was executed).
 // postval must be urlencoded.
-void client_http_post(const prog_char *urlbuf, const char *urlbuf_varpart,const char *hoststr, const prog_char *additionalheaderline,char *postval,void (*callback)(uint16_t,uint16_t,uint16_t),uint8_t *dstip,uint8_t *dstmac)
+void client_http_post(PGM_P urlbuf, const char *urlbuf_varpart,const char *hoststr, PGM_P additionalheaderline,char *postval,void (*callback)(uint16_t,uint16_t,uint16_t),uint8_t *dstip,uint8_t *dstmac)
 {
         if (!enc28j60linkup())return;
         client_urlbuf=urlbuf;
