@@ -17,6 +17,28 @@
 #include <stdio.h>
 #include <util/delay.h>
 
+
+FUSES = 
+{
+    // 0x62, or
+    // internal RC oscillator at 8MHz, divided by 8
+    .low = LFUSE_DEFAULT,
+
+    // 0xDF
+    // - BOD disabled
+    // - EESAVE off
+    // - RESET enabled
+    // - ISP/SPI enabled
+    // - DebugWire off
+    // - Watchdog not forced
+    .high = HFUSE_DEFAULT,
+
+    // default value
+    .extended = EFUSE_DEFAULT,
+};
+
+
+
 #define ENC_RESET PD3
 
 // webszerver demo kod alapjan teszt celbol

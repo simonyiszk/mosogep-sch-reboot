@@ -13,5 +13,8 @@ mosogep_probalkozas.elf: mosogep_probalkozas.o enc28j60.o ip_arp_udp_tcp.o uart.
 clean:
 	rm -f *.elf *.o *.hex
 
-install: mosogep_probalkozas.hex
-	avrdude -V -p m168 -c usbasp -U flash:w:mosogep_probalkozas.hex
+flash: mosogep_probalkozas.elf
+	avrdude -V -p m168 -c usbasp -U flash:w:mosogep_probalkozas.elf
+
+fuse: mosogep_probalkozas.elf
+	avrdude -p m168 -c usbasp -U lfuse:w:mosogep_probalkozas.elf -U hfuse:w:mosogep_probalkozas.elf -U efuse:w:mosogep_probalkozas.elf
