@@ -65,13 +65,25 @@ void hw_init()
 //ez benne is lesz a csomag elejen
 uint8_t read_jumpers(void)
 {
+    // Mivel PB2 = /SS, ha input és low az megbassza az SPI-t
+    // ezt meg lehet kerülni, ha outputnak használjuk, és csak a beolvasás idejére kapcsoljuk inputba
+    
+    DDRB &= ~(1<<PB2);
+
     uint8_t temp=0;
     if(!(PIND&(1<<PD6))) temp|=1;
     if(!(PIND&(1<<PD7))) temp|=2;
     if(!(PINB&(1<<PB0))) temp|=4;
     if(!(PINB&(1<<PB1))) temp|=8;
+    if(!(PINB&(1<<PB2))) temp|=16;
 
-	if(temp==0) temp=17;
+    // PB2 visszakapcsolása
+    // mivel lehet rajta jumper, ezért csak LOW state lehet
+    PORTB &= ~(1<<PB2);
+    DDRB |= (1<<PB2);
+
+    // mivel így már minden szintet be lehet programozni, nem kell a 17-re speciális elbánás
+	if(temp==0) temp=99;
     return temp;
 }
 
