@@ -5,7 +5,7 @@
  *      Author: MaSTeRFoXX
  */
 
-
+#include "uart.h"
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
@@ -44,6 +44,10 @@ volatile uint8_t szarito_L;
 //GPIO meg egyeb HW beallitasok
 void hw_init()
 {
+        // for printf
+        usart_initialize();
+	    stdout = &uart_output;
+
         //DDRC|=(1<<PC0);
         DDRD|=(1<<ENC_RESET);
         PORTD&=~(1<<ENC_RESET);
@@ -57,7 +61,7 @@ void hw_init()
         //DIDR0 |=(1<<ADC0D) | (1<<ADC1D);  wat nem ismeri a regisztert
 }
 
-//beolvassa a jumperok allasat, ez adja az IP CIM veget, a MAC cím veget
+//beolvassa a jumperok allasat, ez adja az IP CIM veget, a MAC cï¿½m veget
 //ez benne is lesz a csomag elejen
 uint8_t read_jumpers(void)
 {
@@ -85,18 +89,26 @@ int main(void)
 
        	delay(100);
         hw_init();
-		
+        printf("Begin init\n");
      //   wdt_enable(WDTO_1S);
-        //szint cím beolvasasa ennek megfeleloen all be a mac es IP cim
+        //szint cï¿½m beolvasasa ennek megfeleloen all be a mac es IP cim
         myip[3]=read_jumpers();
         mymac[5]=read_jumpers();
+        printf("Jumpers read: %d\n", myip[3]);
+
+        printf("Start initing ENC28\n");
+        //wdt_reset();
         //initialize the hardware driver for the enc28j60
         enc28j60Init(mymac);
+        printf("ENC init done\n");
+
         _delay_loop_1(0); // 60us
         enc28j60PhyWrite(PHLCON,0x476);
         //init the ethernet/ip layer:
         init_udp_or_www_server(mymac,myip);
         www_server_port(MYWWWPORT);
+        printf("All init done\n");
+
 
         while(1)
         {
@@ -129,6 +141,7 @@ int main(void)
             dat[5]=moso_L; //mosogep_L byte
             dat[6]=szarito_H; //szaritogep_H byte
             dat[7]=szarito_L; //szaritogep_L byte
+            printf("Got data: moso=%d szarito=%d\n", moso_H << 8 + moso_L, szarito_H<<8+szarito_L);
             send_udp(buf,dat,sizeof(dat),1234,allxff, 1234,allxff);
         }
         return (0);

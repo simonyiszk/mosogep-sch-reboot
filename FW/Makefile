@@ -7,7 +7,7 @@ CFLAGS=-Os -DF_CPU=1000000UL -mmcu=atmega168
 %.hex: %.elf
 	${OBJCOPY} -O ihex -R .eeprom $< $@
 
-mosogep_probalkozas.elf: mosogep_probalkozas.o enc28j60.o ip_arp_udp_tcp.o
+mosogep_probalkozas.elf: mosogep_probalkozas.o enc28j60.o ip_arp_udp_tcp.o uart.o
 	${CC} -o $@ $^ $(CFLAGS)
 
 clean:
