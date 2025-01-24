@@ -12,15 +12,16 @@ void usart_initialize(void) {
 	UCSR0C = (1<<UCSZ01) | (1<<UCSZ00);
 }
 
-void usart_send_byte(char byte, FILE *stream) {
+int usart_send_byte(char byte, FILE *stream) {
 	if (byte == '\n') {
 		usart_send_byte('\r',stream);
 	}
-		loop_until_bit_is_set(UCSR0A,UDRE0);
-		UDR0 = byte;
+    loop_until_bit_is_set(UCSR0A,UDRE0);
+    UDR0 = byte;
+    return 0;
 }
 
-char usart_get_byte(FILE *stream) {
+int usart_get_byte(FILE *stream) {
     loop_until_bit_is_set(UCSR0A, RXC0);
     return UDR0;
 }

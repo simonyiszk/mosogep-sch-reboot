@@ -2,8 +2,8 @@
 #define USART_PRINTF_H
 #include <stdio.h>
 
-void usart_send_byte(char byte, FILE *stream);
-char usart_get_byte(FILE *stream);
+int usart_send_byte(char byte, FILE *stream);
+int usart_get_byte(FILE *stream);
 void usart_initialize(void);
 
 FILE uart_output = FDEV_SETUP_STREAM(usart_send_byte, NULL, _FDEV_SETUP_WRITE);
