@@ -5,7 +5,11 @@
  *      Author: MaSTeRFoXX
  */
 
+#ifdef DEBUG
 #include "uart.h"
+#else
+#define printf(...)
+#endif
 #include <avr/io.h>
 #include <avr/wdt.h>
 #include <util/delay.h>
@@ -42,10 +46,15 @@ volatile uint8_t szarito_L;
 //GPIO meg egyeb HW beallitasok
 void hw_init()
 {
+    #ifdef DEBUG
         // for printf
         usart_initialize();
 	    stdout = &uart_output;
 
+        // for debug LED
+        DDRC |= (1<<PC2);
+        PORTC |= (1<<PC2);
+    #endif
         //DDRC|=(1<<PC0);
         DDRD|=(1<<ENC_RESET);
         PORTD&=~(1<<ENC_RESET);
@@ -91,8 +100,6 @@ int main(void)
         uint8_t dat[]="          Mosogep.sch by SEM. SEM RULEZ! (FW by .:: FoXX::. 2014)!\0";
 
        	_delay_ms(100);
-        DDRC |= (1<<PC2);
-        PORTC |= (1<<PC2);
         hw_init();
         printf("Begin init\n");
      //   wdt_enable(WDTO_1S);
@@ -118,7 +125,9 @@ int main(void)
         while(1)
         {
      //       wdt_reset();
+            #ifdef DEBUG
             PORTC ^= (1<<PC2);
+            #endif
 			_delay_ms(100);
             //mosogep megmerese
             ADMUX = (ADMUX & 0xf0) | 0; // mosogep kivalasztasa

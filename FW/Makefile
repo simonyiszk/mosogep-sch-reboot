@@ -1,7 +1,7 @@
 CC=avr-gcc
 OBJCOPY=avr-objcopy
 
-CFLAGS=-Os -DF_CPU=1000000UL -mmcu=atmega168
+CFLAGS=-Os -DF_CPU=1000000UL -mmcu=atmega168 -DDEBUG=1
 
 
 %.hex: %.elf
