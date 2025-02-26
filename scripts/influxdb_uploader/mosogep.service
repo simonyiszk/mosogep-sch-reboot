@@ -1,0 +1,8 @@
+[Unit]
+Description=Mosogep Collector
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/python3 /opt/save.py
+#KillMode=process
+Restart=on-failure
