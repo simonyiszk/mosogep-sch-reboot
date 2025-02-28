@@ -1,0 +1,56 @@
+services:
+  caddy:
+    image: caddy:latest
+    volumes:
+      - ./proxy:/etc/caddy
+    network_mode: host
+    restart: unless-stopped
+
+  db:
+    image: postgres
+    network_mode: host
+    environment:
+      POSTGRES_DB: "${DB_NAME}"
+      POSTGRES_USER: "${DB_USER}"
+      POSTGRES_PASSWORD: "${DB_PASSWORD}"
+    restart: unless-stopped
+
+  influxdb:
+    image: influxdb:latest
+    network_mode: host
+    volumes:
+      - /docker_volumes/influxdb2:/var/lib/influxdb2
+    environment:
+      INFLUXDB_DB: "${INFLUXDB_DB}"
+      INFLUXDB_ADMIN_USER: "${INFLUXDB_ADMIN_USER}"
+      INFLUXDB_ADMIN_PASSWORD: "${INFLUXDB_ADMIN_PASSWORD}"
+      INFLUXD_REPORTING_DISABLED: 'true'
+    restart: unless-stopped
+
+  frontend:
+    image: statusch-frontend:latest
+    build: ./frontend
+    network_mode: host
+    restart: unless-stopped
+
+  backend:
+    image: statusch-backend:latest
+    build: ./backend
+    network_mode: host
+    environment:
+      DJANGO_SETTINGS_MODULE: 'statusch.settings.production'
+      SECRET_KEY: "${BACKEND_SECRET_KEY}"
+      ALLOWED_HOSTS: "${ALLOWED_HOSTS}"
+      DB_HOST: '127.0.0.1'
+      DB_PORT: '5432'
+      DB_NAME: "${DB_NAME}"
+      DB_USER: "${DB_USER}"
+      DB_PASSWORD: "${DB_PASSWORD}"
+      INFLUXDB_ORG: "${INFLUXDB_ORG}"
+      INFLUXDB_URL: 'http://127.0.0.1:8086'
+      INFLUXDB_TOKEN: "${INFLUXDB_TOKEN}"
+      INFLUXDB_BUCKET: "${INFLUXDB_BUCKET}"
+    restart: unless-stopped
+    depends_on:
+      - db
+      - influxdb
