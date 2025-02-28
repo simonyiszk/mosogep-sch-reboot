@@ -24,3 +24,7 @@ Az emeletek adatai a `mosogep_data.py`-ban vannak
 Hosszabb ideig számolja a beérkezett csomagokat emelet szerint csoportosítva, majd kiírja az eredményt, illetve fileba is menti.
 
 A program célja az FW-k összehangolása hogy azonos mintavételi sebességgel küldjék a csomagokat. Minden panel külön megmérhető közvetlenül is, illetve a központi szerveren futtatva a ténylegesen megkapott csomagszámokat látjuk (a hálózat esetlege hibáival együtt).
+
+## FAKE SENDER
+
+Kamu adatokat küld az 1-4 szintek nevében az influxdb-be, teszteléshez. Másfél percenként ki-be kapcsolgatja az összes gépet. A tokeneket természetesen ki kell tölteni.

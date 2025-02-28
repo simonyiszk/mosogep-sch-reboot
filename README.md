@@ -23,3 +23,5 @@ Build & launch
 
 
 A backend a `8000`-es, a frontend a `3000`-es, az influx a `8086`-os porton fut. A `proxy` mappa Caddy konfigja kiproxyzza a frontendet és a backend API-t, ami dockerből automatikusan indul. Production-ben a Caddyfile-t át kell írni a megfelelő hostra.
+
+Dev célra a leghasznosabb script a `scripts/fake_sender`, ami kamu adatokat küld az influxdb-be.
