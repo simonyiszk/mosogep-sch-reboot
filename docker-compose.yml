@@ -54,3 +54,16 @@ services:
     depends_on:
       - db
       - influxdb
+
+  collector:
+    image: collector:latest
+    build: ./collector
+    network_mode: host
+    restart: unless-stopped
+    environment:
+      INFLUXDB_ORG: "${INFLUXDB_ORG}"
+      INFLUXDB_URL: 'http://127.0.0.1:8086'
+      INFLUXDB_TOKEN: "${INFLUXDB_TOKEN}"
+      INFLUXDB_BUCKET: "${INFLUXDB_BUCKET}"
+    depends_on:
+      - influxdb
