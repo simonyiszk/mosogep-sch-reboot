@@ -1,5 +1,6 @@
 # mosogep-sch-reboot
 Mosogep.sch project reboot
+
 Projekt dokumentáció: https://docs.google.com/document/d/1uoIA5JC5i7Pd-E8AlqeZ2zfmS9e4bSQlHUPqoVc_8NE/edit?tab=t.0
 
 Mappaszerkezet:
